@@ -14,8 +14,10 @@
   "dependencies": {
     "babel": "^5.6.14",
     "body-parser": "^1.13.2",
+    "consolidate": "^0.13.1",
     "express": "^4.13.1",
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "mustache": "^2.1.2"
   },
   "devDependencies": {
     "eslint": "^0.24.1",
