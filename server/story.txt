@@ -1,0 +1,115 @@
+Il est trop tard pour faire demi-tour. Vous sentez le poigne de fer de l'Empire Galactique se refermer sur vous. La lutte est veine, mais il y a d'autres façons de remporter la victoire. Votre maîtrise des pouvoirs de l'HTTP sera indispensable à votre survie. Saurez-vous affronter l'impitoyable Vador ?
+
+Pour commencer, POSTer votre nom (name) à http://
+
+
+Le rayon tracteur vous attire irrémédiablement vers un des hangars de l'immense station. Votre vaisseau se pose doucement. Puis rien. Au moment où vous vous croyiez perdu, rien. Aucun bruit. Aucun mouvement.
+
+links: out of ship
+
+
+Le hangar est vide et silencieux. La seule issue semble être un couloir sur votre gauche.
+
+links: back into ship, to corridor
+
+
+Le couloir s'étend sur une dizaine de mètre et donne accès à 3 portes, dont 2 sont fermées, d'après la lumière rouge qui émane de leur bouton d'ouverture. La troisième est vérouillé par un digicode.
+
+links: back to hanger, examine 3rd door, try digicode*
+
+
+Un long bip vous indique que le code est erroné. 403.
+
+location: back to corridor*
+
+*same corridor*
+
+links: back to hanger, examine 3rd door*, try digicode
+
+
+Un petit papier jaune de forme carré est collé sur la porte. 4 chiffres y sont griffonés : 2342. Dans le coin est indiqué: "9th light, premier fournisseur d'Agilité".
+
+links: back to corridor, try digicode*
+
+
+La porte s'ouvre puis se referme derrière vous. La pièce est immense. En son centre, un grand écran affiche "Commandes du rayon tracteur". Vous vous demandez comment un jeu peut-être aussi facile. Une autre porte se dessine sur le mur d'en face.
+
+links: back to corridor, to console*, to door
+
+
+Sous le grand écran se trouve un écran de contrôle et un clavier.
+
+links: press escape, space, or enter
+
+
+> |
+
+links: type "halt"
+
+
+hqlt: command not found
+
+links: type "hqlt"
+
+
+Permission denied.
+
+links: type "sudo hqlt", type "fuck", smash keyboard into screen
+
+
+202. location: progress
+
+
+L'écran affiche "Extinction : xx%".
+
+links: back to room
+
+
+*same room*
+
+links: look at progress, to door*
+
+
+La porte est fermée.
+
+links: back to room
+
+
+*same room*
+
+links: look at progress*, to door
+
+
+303.
+
+
+L'écran a à peine affiché 100% que la porte d'entrée s'ouvre. Vous l'entendez avant de le voir. Le plus dangereux des asmathiques est là, devant vous, sabre laser armé. L'effroi vous envahit. Tout est perdu. A moins que vous ne connaissiez bien vos méthodes HTTP.
+
+links tp image and sound, no actions => manual delete
+
+204, link to room*
+
+
+*same room*
+
+links: go to door where we came from
+
+
+Alors que vous approchez de la porte, vous entendez des dizaines de pas que se précipitent vers elle de l'autre côté. Des stormtroopers !
+
+links: go to certain death*, look to hide*
+
+
+303. La porte au fond de la salle s'ouvre et quelqu'un entre dans la pièce. C'est une jeune fille, armé d'une hache et d'une machette. Elle traverse la pièce en courant, passe devant vous sans vous voir, puis se précipite dans le couloir. La porte se referme derrière elle. Des cris retentissent.
+
+links: go to other door, follow girl*
+
+
+Les cris continuent. Après réflexion, vous pensez qu'il ne voudrait mieux pas aller par là.
+
+links: go to other door*
+
+
+Vous entrez dans une petit salle. Au centre, une sphère bleue flotte au-dessus du sol, en emmettant un léger vrombissement.
+
+

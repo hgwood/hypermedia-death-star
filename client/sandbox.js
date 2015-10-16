@@ -1,0 +1,62 @@
+"use strict"
+
+// require("babel/register")({
+//   only: /src\/client\/src/,
+//   ignore: false
+// })
+
+
+const game = require("./")
+const root = "http://localhost:3000"
+
+game.to(root, "text/plain")
+  .then(() => game.body())
+  .then(() => game.to(root, "application/json"))
+  .then(() => game.body())
+  .then(() => game.json())
+  .then(() => game.to(root, "application/vnd.siren+json"))
+  .then(() => game.yaml())
+  .then(() => game.do("start", {name: "HX"}))
+  .then(() => game.follow())
+  .then(() => game.look())
+  .then(() => game.links())
+  .then(() => game.go(0))
+  .then(() => game.look())
+  .then(() => game.links())
+  .then(() => game.go(1))
+  .then(() => game.look())
+  .then(() => game.links())
+  .then(() => game.actions())
+  // .then(() => game.do("enter_digicode", {code: "0000"}))
+  .then(() => game.do("open_door"))
+  .then(() => game.look())
+  .then(() => game.auth("", "2342"))
+  .then(() => game.look())
+  .then(() => game.follow())
+  .then(() => game.look())
+  .then(() => game.links())
+  .then(() => game.go(0))
+  .then(() => game.look())
+  .then(() => game.actions())
+  .then(() => game.do(0))
+  .then(() => game.look())
+  .then(() => game.actions())
+  .then(() => game.do(0))
+  .then(() => game.look())
+  .then(() => game.actions())
+  .then(() => game.do(0))
+  .then(() => game.look())
+  .then(() => game.actions())
+  .then(() => game.do(2))
+  .then(() => game.look())
+  .then(() => game.follow())
+  .then(() => game.look())
+  .then(() => game.wait(3))
+  .then(() => game.go(0))
+  .then(() => game.look())
+  .then(() => game.wait(3))
+  .then(() => game.go(0))
+  .then(() => game.follow())
+  .then(() => game.look())
+
+

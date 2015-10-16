@@ -4,6 +4,8 @@
     "es6": true
   },
   "rules": {
+    "comma-dangle": 0,
+    "curly": [2, "multi-line"],
     "no-use-before-define": [2, "nofunc"],
     "quotes": [2, "double", "avoid-escape"],
     "semi": [2, "never"]

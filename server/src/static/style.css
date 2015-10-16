@@ -1,0 +1,60 @@
+body {
+  /*background: #3ba666;*/
+  background: #1D1F21;
+}
+
+.content {
+  background: inherit;
+  color: #C5C8C6;
+  font-family: monospace;
+  font-size: x-large;
+  margin: 1% auto;
+  width: 80%;
+  padding: 5%;
+}
+
+input {
+  border: 1px solid #C5C8C6;
+  background: inherit;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+label:after {
+  content: ': ';
+}
+
+button {
+  border: 1px solid #C5C8C6;
+  background: inherit;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+a {
+  color: #A54242;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.blink {
+  animation-duration: 3s;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes blink {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}

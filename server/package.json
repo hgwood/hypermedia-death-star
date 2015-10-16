@@ -5,19 +5,22 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "forever": "nodemon index.js",
+    "forever": "nodemon --verbose --watch src**/* index.js",
     "linter": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "repl": "babel-node"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "babel": "^5.6.14",
+    "basic-auth": "^1.0.3",
     "body-parser": "^1.13.2",
     "consolidate": "^0.13.1",
     "express": "^4.13.1",
     "jade": "^1.11.0",
-    "mustache": "^2.1.2"
+    "lodash": "^3.10.0",
+    "mustache": "^2.1.2",
+    "shortid": "^2.2.2"
   },
   "devDependencies": {
     "eslint": "^0.24.1",
