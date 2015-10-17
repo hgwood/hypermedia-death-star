@@ -15,10 +15,10 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json({type: "application/*+json"}))
 app.set("views", path.join(__dirname, "node_modules"))
 
-const routes = require("places/routes")
+const routes = process.argv[2] === "--obs" ? require("places/routes-obfuscated") : require("places/routes")
 
 _.each(routes, function(uri, placeId) {
-  console.log("route", placeId, uri)
+  // console.log("route", placeId, uri)
   const place = render(placeId, require(`places/${placeId}`), uri)
   app.get(uri, place.handler ? _.partial(place.handler, place) : function(request, response) {
     sendPlace(response, place)
@@ -39,7 +39,7 @@ _.each(routes, function(uri, placeId) {
 
 function render(placeId, place, uri) {
   if (place.rendered) return place
-  console.log("place", placeId, uri, _.map(place.actions, "href"))
+  // console.log("place", placeId, uri, _.map(place.actions, "href"))
   if (!render.stack) render.stack = []
   if (render.stack.length > 10) return
   place.rendered = true
@@ -54,13 +54,13 @@ function render(placeId, place, uri) {
     if (action.returnedLocation) action.returnedLocation = renderLink(action.returnedLocation)
     if (!action.method) action.method = "GET"
   })
+  if (!place.links) place.links = []
+  place.links.push({name: "self", rel: ["self"], href: placeId, description: "\u27F2"})
   _.each(place.links, link => {
     if (link.rendered) return
     link.rendered = true
     link.href = renderLink(link.href, uri)
   })
-  if (!place.links) place.links = []
-  place.links.push({name: "self", rel: ["self"], href: placeId})
   if (place.authorized && place.authorized.location) place.authorized.location = renderLink(place.authorized.location)
   if (place.locationAfterCountdown) place.locationAfterCountdown = renderLink(place.locationAfterCountdown)
   render.stack.pop()
@@ -69,7 +69,7 @@ function render(placeId, place, uri) {
 
 function renderLink(linkTemplate, reference) {
   if (linkTemplate === "$self") return reference
-  console.log("linkTemplate", linkTemplate)
+  // console.log("linkTemplate", linkTemplate)
   return routes[linkTemplate].replace(/:\w+/, shortid.generate())
 }
 

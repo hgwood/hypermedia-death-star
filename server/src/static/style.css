@@ -1,5 +1,4 @@
 body {
-  /*background: #3ba666;*/
   background: #1D1F21;
 }
 
@@ -11,6 +10,32 @@ body {
   margin: 1% auto;
   width: 80%;
   padding: 5%;
+}
+
+.content .title {
+  color: #B294BB;
+}
+
+.content .description {
+  text-align: justify;
+}
+
+.controls {
+  display: flex;
+}
+
+.controls-icon {
+  font-size: 130%;
+  color: #B294BB;
+}
+
+.links, .actions {
+  width: 50%;
+}
+
+.links ul, .actions ul {
+  list-style-type: none;
+  padding-left: 1em;
 }
 
 input {
@@ -34,7 +59,7 @@ button {
 }
 
 a {
-  color: #A54242;
+  color: #81A2BE;
   text-decoration: none;
 }
 
@@ -43,7 +68,7 @@ a:hover {
 }
 
 .blink {
-  animation-duration: 3s;
+  animation-duration: 2s;
   animation-name: blink;
   animation-iteration-count: infinite;
   animation-direction: alternate;

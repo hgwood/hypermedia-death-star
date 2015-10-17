@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js --obs",
     "forever": "nodemon --verbose --watch src**/* index.js",
     "linter": "eslint .",
     "repl": "babel-node"

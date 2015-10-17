@@ -12,6 +12,7 @@ let current
 let referenceUrl
 let referenceMediaType
 let redoWithAuth
+let autoLook
 
 module.exports = {
   to: bluebird.promisify(gotoAndSet),
@@ -23,9 +24,10 @@ module.exports = {
   body: body,
   json: () => console.log(json(current.body)),
   yaml: () => console.log(yaml(current.body)),
-  look: () => current.body.properties && console.log(current.body.properties.description),
-  links: () => console.log(yaml(current.body.links)),
-  actions: () => console.log(yaml(current.body.actions))
+  look: () => current.body && current.body.properties && console.log(current.body.properties.description) || console.error("cannot read body.properties.description"),
+  autoLook: () => autoLook = !autoLook,
+  links: () => current.body && current.body.links && console.log(yaml(current.body.links)) || console.error("cannot read body.links"),
+  actions: () => current.body && current.body.actions && console.log(yaml(current.body.actions)) || console.error("cannot read body.actions")
 }
 
 module.exports.silent = silent(module.exports)
@@ -56,7 +58,6 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
     .header("Accept", mediaType)
     .send()
     .end(response => {
-      if (response.error) return console.error(response.error, request)
       const requestInfo = _.assign({url: url, method: "GET"}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
@@ -64,6 +65,7 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
       printInfo(responseInfo, "response")
       current = response
       redoWithAuth = _.partial(gotoUrlWithAuth, url, mediaType)
+      if (autoLook) module.exports.look()
       callback(null, response)
     })
 }
@@ -90,7 +92,6 @@ function doAction(actionNameOrIndex, params, auth, callback) {
     .header("Accept", referenceMediaType)
     .send(params)
     .end(response => {
-      // if (response.error) return console.error(response.error, request)
       const requestInfo = _.assign({url: url, method: "GET"}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
@@ -98,6 +99,7 @@ function doAction(actionNameOrIndex, params, auth, callback) {
       printInfo(responseInfo, "response")
       current = response
       redoWithAuth = _.partial(doAction, actionNameOrIndex, params)
+      if (autoLook) module.exports.look()
       callback(null, response)
     })
 }
