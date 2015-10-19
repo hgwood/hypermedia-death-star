@@ -100,16 +100,61 @@ Alors que vous approchez de la porte, vous entendez des dizaines de pas que se p
 links: go to certain death*, look to hide*
 
 
-303. La porte au fond de la salle s'ouvre et quelqu'un entre dans la pièce. C'est une jeune fille, armé d'une hache et d'une machette. Elle traverse la pièce en courant, passe devant vous sans vous voir, puis se précipite dans le couloir. La porte se referme derrière elle. Des cris retentissent.
+303
+
+La porte au fond de la salle s'ouvre et quelqu'un entre dans la pièce. C'est une jeune fille, armé d'une hache et d'une machette. Elle traverse la pièce en courant, passe devant vous sans vous voir, puis se précipite dans le couloir. La porte se referme derrière elle. Des cris retentissent.
 
 links: go to other door, follow girl*
 
 
-Les cris continuent. Après réflexion, vous pensez qu'il ne voudrait mieux pas aller par là.
+Les cris continuent. Après réflexion, vous pensez qu'il ne voudrait mieux pas aller par là. Oui, ce jeu est sur un rail.
 
 links: go to other door*
 
 
-Vous entrez dans une petit salle. Au centre, une sphère bleue flotte au-dessus du sol, en emmettant un léger vrombissement.
+Vous entrez dans une petit salle. Au centre, une sphère bleue translucide flotte au-dessus du sol, en emmettant un léger vrombissement. Vous sentez une force vous tirer vers la sphère. Vous tentez de reculer, mais vous glissez.
+
+links: se laisser aspirer*
 
 
+Le tonnerre retentit, le sphère disparait, ainsi que l'aspiration. La pièce est resté inchangée. Il n'y a pas d'autre issue hormis la porte par laquelle vous êtes entré.
+
+links: sortir*
+
+
+La salle de contrôle est silencieuse. Pas de traces des troupes ou de la fille.
+
+links: aller dans le couloir*
+
+*same description of corridor*
+
+links: salle de contrôle, examiner la troisième porte, hangar*
+
+
+Le hangar est vide...Votre vaisseau a disparu!
+
+links: couloir*
+
+
+*same corridor*
+
+links: salle de contrôle, examiner la troisième porte*, hangar
+
+
+Un petit papier jaune de forme carré est collé sur la porte. Dans le coin est indiqué: "9th light, premier fournisseur d'Agilité".
+
+links: couloir
+actions: write code* (add same action to old paper, it's a PATCH on the message of the paper)
+
+
+Un petit papier jaune de forme carré est collé sur la porte. 4 chiffres y sont griffonés : 2342. Dans le coin est indiqué: "9th light, premier fournisseur d'Agilité".
+
+links: couloir*
+actions: write code
+
+
+303
+
+Un vaisseau atterit! Tandis que vous vous dirigez vers le hangar, une voix retentit derrière vous: "PARADOXE!!". Vous prenez un violent coup à la tête et vous évanouissez. Vous vous réveillez dans une salle inconnue dont la seule décoration est un grand tableau blanc. De nombreux papiers jaunes sont collés dessus. Ils sont disposés en 3 colonnes.
+
+links: examiner la colonne intitulé "To Do", "Doing", "Done"
