@@ -38,6 +38,10 @@ body {
   padding-left: 1em;
 }
 
+.no-action, .no-link {
+  opacity: 0.5;
+}
+
 input {
   border: 1px solid #C5C8C6;
   background: inherit;
