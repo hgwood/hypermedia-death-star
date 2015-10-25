@@ -77,7 +77,7 @@ function render(placeId, place, uri) {
 function renderLink(linkTemplate, reference) {
   if (linkTemplate === "$self") return reference
   // console.log("linkTemplate", linkTemplate, routes[linkTemplate])
-  return routes[linkTemplate].replace(/:\w+/, shortid.generate())
+  return routes[linkTemplate].replace(/:\w+/, "game")
 }
 
 /*

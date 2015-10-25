@@ -15,6 +15,7 @@ let redoWithAuth
 let autoLook
 let autoControls
 let lastUrl
+const cache = {}
 
 module.exports = {
   to: bluebird.promisify(gotoAndSet),
@@ -59,6 +60,7 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
     console.log(auth)
     request.auth(auth)
   }
+  if (cache[url]) request.header("If-None-Match", cache[url].headers.etag)
   request
     .followRedirect(false)
     .header("Accept", mediaType)
@@ -70,7 +72,10 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
       const statusText = httpStatusCodes.getStatusText(response.status)
       const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "link"))
       printInfo(responseInfo, "response")
-      current = response
+      if (response.status !== 304) {
+        current = response
+        cache[url] = response
+      }
       redoWithAuth = _.partial(gotoUrlWithAuth, url, mediaType)
       lastUrl = url
       if (autoLook) module.exports.look()
