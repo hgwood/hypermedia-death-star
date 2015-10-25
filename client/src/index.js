@@ -65,7 +65,6 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
     .send()
     .end(response => {
       if (!response.request) return console.error("invalid request: ", url)
-      // console.log("headers", response.headers)
       const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
@@ -91,22 +90,19 @@ function doAction(actionNameOrIndex, params, auth, callback) {
   }
   const action = _.find(current.body.actions, {name: actionNameOrIndex}) || current.body.actions[actionNameOrIndex]
   if (!action) return console.error(`no action named/at index ${actionNameOrIndex}`)
-  // console.log("action", action)
   const url = referenceUrl + action.href
   const request = unirest[action.method.toLowerCase()](url)
   if (auth) {
     auth.sendImmediatly = true
     request.auth(auth)
   }
-  // console.log("url", url)
   request
     .followRedirect(false)
     .header("Accept", referenceMediaType)
     .send(params)
     .end(response => {
       if (!response.request) return console.error("invalid request: ", url)
-        // console.log("headers", response.headers)
-      const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
+      const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization", "Content-Type"), (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
       const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link"))

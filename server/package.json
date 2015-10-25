@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js --obs",
-    "forever": "nodemon --verbose --watch src**/* index.js",
+    "forever": "nodemon --debug --verbose --watch src**/* index.js",
     "linter": "eslint .",
     "repl": "babel-node"
   },
