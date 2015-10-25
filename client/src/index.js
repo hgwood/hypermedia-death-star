@@ -65,10 +65,11 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
     .send()
     .end(response => {
       if (!response.request) return console.error("invalid request: ", url)
+      // console.log("headers", response.headers)
       const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
-      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location"))
+      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "link"))
       printInfo(responseInfo, "response")
       current = response
       redoWithAuth = _.partial(gotoUrlWithAuth, url, mediaType)
@@ -103,10 +104,12 @@ function doAction(actionNameOrIndex, params, auth, callback) {
     .header("Accept", referenceMediaType)
     .send(params)
     .end(response => {
+      if (!response.request) return console.error("invalid request: ", url)
+        // console.log("headers", response.headers)
       const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
-      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate"))
+      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link"))
       printInfo(responseInfo, "response")
       current = response
       redoWithAuth = _.partial(doAction, actionNameOrIndex, params)
@@ -141,7 +144,7 @@ function _delete(callback) {
       const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
-      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate"))
+      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link"))
       printInfo(responseInfo, "response")
       current = response
       callback(null, response)
