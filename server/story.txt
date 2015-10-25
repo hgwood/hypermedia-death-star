@@ -70,9 +70,9 @@ links: back to room
 links: look at progress, to door*
 
 
-La porte est fermée.
+La porte est fermée. Cette porte est juste là pour donner l'illusion du choix.
 
-links: back to room
+links: back to room*
 
 
 *same room*
@@ -92,7 +92,7 @@ links tp image and sound, no actions => manual delete
 
 *same room*
 
-links: go to door where we came from
+links: go to door where we came from*, back door
 
 
 Alors que vous approchez de la porte, vous entendez des dizaines de pas que se précipitent vers elle de l'autre côté. Des stormtroopers !
@@ -155,6 +155,19 @@ actions: write code
 
 303
 
-Un vaisseau atterit! Tandis que vous vous dirigez vers le hangar, une voix retentit derrière vous: "PARADOXE!!". Vous prenez un violent coup à la tête et vous évanouissez. Vous vous réveillez dans une salle inconnue dont la seule décoration est un grand tableau blanc. De nombreux papiers jaunes sont collés dessus. Ils sont disposés en 3 colonnes.
+Un vaisseau atterrit! Tandis que vous vous dirigez vers le hangar, une voix retentit derrière vous: "PARADOXE!!". Vous prenez un violent coup à la tête et vous évanouissez. Vous vous réveillez dans une salle inconnue dont la seule décoration est un grand tableau blanc. De nombreux papiers jaunes sont collés dessus. Ils sont disposés en 3 colonnes.
 
-links: examiner la colonne intitulé "To Do", "Doing", "Done"
+links: examiner la colonne intitulé "To Do", "Doing"*, "Done"
+
+
+Le colonne "Doing" contient un unique papier, sur lequel est écrit "Examiner ce tableau".
+
+links: examiner la colonne intitulé "To Do", "Done"*
+
+
+La colonne "Done" contient plusieurs papiers sur lesquels sont écrits de courts messages: "Se faire capturer par l'étoile noire", "Eteindre le rayon tracteur", "DELETE /vader", "Remonter dans le temps", "Noter le code sur la porte".
+
+links: examiner la colonne intitulé "To Do"*, "Doing"
+
+
+La colonne "To Do" contient plusieurs papiers sur lequels sont écrits de courts messages: ""

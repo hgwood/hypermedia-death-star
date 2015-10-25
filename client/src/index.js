@@ -13,6 +13,8 @@ let referenceUrl
 let referenceMediaType
 let redoWithAuth
 let autoLook
+let autoControls
+let lastUrl
 
 module.exports = {
   to: bluebird.promisify(gotoAndSet),
@@ -20,14 +22,18 @@ module.exports = {
   go: bluebird.promisify(gotoLink),
   follow: bluebird.promisify(follow),
   auth: bluebird.promisify(auth),
+  delete: bluebird.promisify(_delete),
+  get: bluebird.promisify(get),
   wait: bluebird.promisify(wait),
   body: body,
   json: () => console.log(json(current.body)),
   yaml: () => console.log(yaml(current.body)),
-  look: () => current.body && current.body.properties && console.log(current.body.properties.description) || console.error("cannot read body.properties.description"),
+  look: () => current.body && current.body.properties ? console.log(current.body.properties.description) : console.error("cannot read body.properties.description"),
   autoLook: () => autoLook = !autoLook,
-  links: () => current.body && current.body.links && console.log(yaml(current.body.links)) || console.error("cannot read body.links"),
-  actions: () => current.body && current.body.actions && console.log(yaml(current.body.actions)) || console.error("cannot read body.actions")
+  autoControls: () => autoControls = !autoControls,
+  links: () => current.body && current.body.links ? console.log(yaml(current.body.links)) : console.error("cannot read body.links"),
+  actions: () => current.body && current.body.actions ? console.log(yaml(current.body.actions)) : console.error("cannot read body.actions"),
+  controls: () => module.exports.links() || module.exports.actions()
 }
 
 module.exports.silent = silent(module.exports)
@@ -58,14 +64,17 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
     .header("Accept", mediaType)
     .send()
     .end(response => {
-      const requestInfo = _.assign({url: url, method: "GET"}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
+      if (!response.request) return console.error("invalid request: ", url)
+      const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
       const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location"))
       printInfo(responseInfo, "response")
       current = response
       redoWithAuth = _.partial(gotoUrlWithAuth, url, mediaType)
+      lastUrl = url
       if (autoLook) module.exports.look()
+      if (autoControls) module.exports.controls()
       callback(null, response)
     })
 }
@@ -81,25 +90,29 @@ function doAction(actionNameOrIndex, params, auth, callback) {
   }
   const action = _.find(current.body.actions, {name: actionNameOrIndex}) || current.body.actions[actionNameOrIndex]
   if (!action) return console.error(`no action named/at index ${actionNameOrIndex}`)
+  // console.log("action", action)
   const url = referenceUrl + action.href
   const request = unirest[action.method.toLowerCase()](url)
   if (auth) {
     auth.sendImmediatly = true
     request.auth(auth)
   }
+  // console.log("url", url)
   request
     .followRedirect(false)
     .header("Accept", referenceMediaType)
     .send(params)
     .end(response => {
-      const requestInfo = _.assign({url: url, method: "GET"}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
+      const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
       const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate"))
       printInfo(responseInfo, "response")
       current = response
       redoWithAuth = _.partial(doAction, actionNameOrIndex, params)
+      lastUrl = url
       if (autoLook) module.exports.look()
+      if (autoControls) module.exports.controls()
       callback(null, response)
     })
 }
@@ -117,6 +130,27 @@ function follow(callback) {
 
 function auth(username, password, callback) {
   return redoWithAuth({user: username, pass: password}, callback)
+}
+
+function _delete(callback) {
+  const url = lastUrl
+  unirest.delete(url)
+    .followRedirect(false)
+    .header("Accept", referenceMediaType)
+    .end(response => {
+      const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
+      printInfo(requestInfo, "request")
+      const statusText = httpStatusCodes.getStatusText(response.status)
+      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate"))
+      printInfo(responseInfo, "response")
+      current = response
+      callback(null, response)
+    })
+}
+
+function get(callback) {
+  console.log(lastUrl)
+  gotoUrl(lastUrl, referenceMediaType, callback)
 }
 
 function wait(seconds, callback) {
