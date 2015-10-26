@@ -112,7 +112,7 @@ function doAction(actionNameOrIndex, params, auth, callback) {
       const statusText = httpStatusCodes.getStatusText(response.status)
       const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link"))
       printInfo(responseInfo, "response")
-      current = response
+      if (response.status !== 205) current = response
       redoWithAuth = _.partial(doAction, actionNameOrIndex, params)
       lastUrl = url
       if (autoLook) module.exports.look()
@@ -153,7 +153,6 @@ function _delete(callback) {
 }
 
 function get(callback) {
-  console.log(lastUrl)
   gotoUrl(lastUrl, referenceMediaType, callback)
 }
 
@@ -163,10 +162,6 @@ function wait(seconds, callback) {
 
 function body() {
   return console.log(current.body)
-  /*const contentType = current.headers["content-type"]
-  if (contentType.startsWith("text/place")) console.log(current.body)
-  else if (contentType.startsWith("application/json")) console.log(json(current.body))
-  else console.log("Unacceptable")*/
 }
 
 function json(obj) {
