@@ -1,4 +1,0 @@
-range
-cache-control?
-content-*?
-have clue be on x.star.v2 to demonstrate versioning
