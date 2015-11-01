@@ -9,6 +9,8 @@
 const game = require("./")
 const root = "http://localhost:3000"
 
+game.autoLook()
+game.autoControls()
 game.to(root, "text/plain")
   .then(() => game.body())
   .then(() => game.to(root, "application/json"))
@@ -76,10 +78,24 @@ game.to(root, "text/plain")
   .then(() => game.look())
   .then(() => game.links())
   .then(() => game.go(1))
-  .then(() => game.look())
-  .then(() => game.links())
+  // .then(() => game.look())
+  // .then(() => game.links())
   .then(() => game.go(1))
-  .then(() => game.look())
-  .then(() => game.links())
+  // .then(() => game.look())
+  // .then(() => game.links())
   .then(() => game.go(0))
-  .then(() => game.look())
+  // .then(() => game.look())
+  .then(() => game.go(0)) // 307 time travel
+  .then(() => game.follow())
+  // .then(() => game.look())
+  .then(() => game.go(0)) // control room past
+  // .then(() => game.look())
+  .then(() => game.go(0)) // corridor past
+  // .then(() => game.look())
+  .then(() => game.go(0)) // hanger past
+  .then(() => game.go(0)) // corridor past
+  .then(() => game.go(1)) // third door past
+  .then(() => game.do("write", {text: "2341"}))
+  .then(() => game.do("write", {text: "2342"}))
+  .then(() => game.go(0)) // 303
+  .then(() => game.follow()) // paradox

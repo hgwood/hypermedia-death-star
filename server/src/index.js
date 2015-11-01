@@ -32,7 +32,7 @@ _.each(routes, function(uri, placeId) {
     // console.log(action)
     const target = action.href
     // console.log("target", action.unhref)
-    if (action.handler) app[action.method.toLowerCase()](target, _.partial(action.handler, place, action))
+    if (action.handler) app[action.method.toLowerCase()](target, _.partial(action.handler, _.assign({id: placeId}, place), action))
     else {
       app[action.method.toLowerCase()](target, function(request, response) {
         persistence.with(action.hrefId, function(actionTargetPlace) {

@@ -75,11 +75,13 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
       if (response.status !== 304) {
         current = response
         cache[url] = response
+      } else {
+        current = cache[url]
       }
       redoWithAuth = _.partial(gotoUrlWithAuth, url, mediaType)
       lastUrl = url
-      if (autoLook) module.exports.look()
-      if (autoControls) module.exports.controls()
+      if (autoLook && response.body) module.exports.look()
+      if (autoControls && response.body) module.exports.controls()
       callback(null, response)
     })
 }
