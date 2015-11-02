@@ -35,8 +35,9 @@ game.to(root, "text/plain")
   .then(() => game.look())
   .then(() => game.links())
   .then(() => game.go(1))
-  .then(() => game.look())
-  .then(() => game.actions())
+  .then(() => game.yaml())
+  .then(() => game.get("application/x.star+json;version=2"))
+  .then(() => game.yaml())
   .then(() => game.do("write", {text: "LOL!"}))
   .then(() => game.look())
   .then(() => game.do("open_door"))
@@ -78,20 +79,12 @@ game.to(root, "text/plain")
   .then(() => game.look())
   .then(() => game.links())
   .then(() => game.go(1))
-  // .then(() => game.look())
-  // .then(() => game.links())
   .then(() => game.go(1))
-  // .then(() => game.look())
-  // .then(() => game.links())
   .then(() => game.go(0))
-  // .then(() => game.look())
   .then(() => game.go(0)) // 307 time travel
   .then(() => game.follow())
-  // .then(() => game.look())
   .then(() => game.go(0)) // control room past
-  // .then(() => game.look())
   .then(() => game.go(0)) // corridor past
-  // .then(() => game.look())
   .then(() => game.go(0)) // hanger past
   .then(() => game.go(0)) // corridor past
   .then(() => game.go(1)) // third door past

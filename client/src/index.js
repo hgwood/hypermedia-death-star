@@ -154,8 +154,12 @@ function _delete(callback) {
     })
 }
 
-function get(callback) {
-  gotoUrl(lastUrl, referenceMediaType, callback)
+function get(mediaType, callback) {
+  if (typeof mediaType === "function") {
+    callback = mediaType
+    mediaType = undefined
+  }
+  gotoUrl(lastUrl, mediaType || referenceMediaType, callback)
 }
 
 function wait(seconds, callback) {
