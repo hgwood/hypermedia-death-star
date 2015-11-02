@@ -25,6 +25,7 @@ module.exports = {
   auth: bluebird.promisify(auth),
   delete: bluebird.promisify(_delete),
   get: bluebird.promisify(get),
+  options: bluebird.promisify(options),
   wait: bluebird.promisify(wait),
   body: body,
   json: () => console.log(json(current.body)),
@@ -67,7 +68,11 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
     .send()
     .end(response => {
       if (!response.request) return console.error("invalid request: ", url)
-      const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization", "If-None-Match"), (value, key) => key.toLowerCase()))
+      const requestInfo = _.assign(
+        {url: url, method: response.request.method.toUpperCase()},
+        _.mapKeys(
+          _.pick(response.request.headers, "Accept", "authorization", "If-None-Match", "Allow", "allow"),
+          (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
       const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "link"))
@@ -160,6 +165,24 @@ function get(mediaType, callback) {
     mediaType = undefined
   }
   gotoUrl(lastUrl, mediaType || referenceMediaType, callback)
+}
+
+function options(callback) {
+  const url = lastUrl
+  unirest.options(url).end(function(response) {
+    const requestInfo = _.assign(
+      {url: url, method: response.request.method.toUpperCase()},
+      _.mapKeys(
+        _.pick(response.request.headers, "Accept", "authorization"),
+        (value, key) => key.toLowerCase()))
+    printInfo(requestInfo, "request")
+    const statusText = httpStatusCodes.getStatusText(response.status)
+    const responseInfo = _.assign(
+      {status: `${response.status} ${statusText}`},
+      _.pick(response.headers, "allow"))
+    printInfo(responseInfo, "response")
+    callback(null, response)
+  })
 }
 
 function wait(seconds, callback) {
