@@ -20,6 +20,7 @@ const routes = process.argv[2] === "--obs" ? require("places/routes-obfuscated")
 
 _.each(routes, function(uri, placeId) {
   const place = render(placeId, _.cloneDeep(require(`places/${placeId}`)), uri)
+
   app.get(uri, place.handler ? _.partial(place.handler, place) : function(request, response) {
     persistence.with(placeId, function(place) {
       if (place.deleted) return response.status(410).location(place.locationAfterDelete).send()
@@ -43,6 +44,8 @@ _.each(routes, function(uri, placeId) {
   })
 
   if (place.hook) place.hook(app, uri, place, placeId)
+
+  app.all(uri, (request, response) => response.sendStatus(405))
 })
 
 
