@@ -12,6 +12,7 @@ let current
 let referenceUrl
 let referenceMediaType
 let redoWithAuth
+let redoWithRange
 let autoLook
 let autoControls
 let lastUrl
@@ -26,6 +27,8 @@ module.exports = {
   delete: bluebird.promisify(_delete),
   get: bluebird.promisify(get),
   options: bluebird.promisify(options),
+  prev: bluebird.promisify(prev),
+  next: bluebird.promisify(next),
   wait: bluebird.promisify(wait),
   body: body,
   json: () => console.log(json(current.body)),
@@ -33,8 +36,8 @@ module.exports = {
   look: () => current.body && current.body.properties ? console.log(current.body.properties.description) : console.error("cannot read body.properties.description"),
   autoLook: () => autoLook = !autoLook,
   autoControls: () => autoControls = !autoControls,
-  links: () => current.body && current.body.links ? console.log(yaml(current.body.links)) : console.error("cannot read body.links"),
-  actions: () => current.body && current.body.actions ? console.log(yaml(current.body.actions)) : console.error("cannot read body.actions"),
+  links: _.partial(yamlArray, "links"),
+  actions: _.partial(yamlArray, "actions"),
   controls: () => module.exports.links() || module.exports.actions()
 }
 
@@ -54,7 +57,11 @@ function gotoUrl(url, mediaType = "text/plain", callback = _.noop) {
   return gotoUrlWithAuth(url, mediaType, undefined, callback)
 }
 
-function gotoUrlWithAuth(url, mediaType, auth, callback) {
+function gotoUrlWithAuth(url, mediaType, auth, range, callback) {
+  if (typeof range === "function") {
+    callback = range
+    range = undefined
+  }
   const request = unirest.get(url)
   if (auth) {
     auth.sendImmediatly = true
@@ -62,6 +69,7 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
     request.auth(auth)
   }
   if (cache[url]) request.header("If-None-Match", cache[url].headers.etag)
+  if (range) request.header("Range", range)
   request
     .followRedirect(false)
     .header("Accept", mediaType)
@@ -71,19 +79,24 @@ function gotoUrlWithAuth(url, mediaType, auth, callback) {
       const requestInfo = _.assign(
         {url: url, method: response.request.method.toUpperCase()},
         _.mapKeys(
-          _.pick(response.request.headers, "Accept", "authorization", "If-None-Match", "Allow", "allow"),
+          _.pick(response.request.headers, "Accept", "authorization", "If-None-Match", "Range"),
           (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
-      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "link"))
+      const responseInfo = _.assign(
+        {status: `${response.status} ${statusText}`},
+        _.pick(response.headers, "content-type", "etag", "location", "link", "content-language", "content-range"))
       printInfo(responseInfo, "response")
-      if (response.status !== 304) {
+      if (response.status === 304) {
+        current = cache[url]
+      } else if (response.status === 206) {
+        current = response
+      } else {
         current = response
         cache[url] = response
-      } else {
-        current = cache[url]
       }
       redoWithAuth = _.partial(gotoUrlWithAuth, url, mediaType)
+      redoWithRange = _.partial(gotoUrlWithAuth, url, mediaType, undefined)
       lastUrl = url
       if (autoLook && response.body) module.exports.look()
       if (autoControls && response.body) module.exports.controls()
@@ -114,10 +127,16 @@ function doAction(actionNameOrIndex, params, auth, callback) {
     .send(params)
     .end(response => {
       if (!response.request) return console.error("invalid request: ", url)
-      const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization", "Content-Type"), (value, key) => key.toLowerCase()))
+      const requestInfo = _.assign(
+        {url: url, method: response.request.method.toUpperCase()},
+        _.mapKeys(
+          _.pick(response.request.headers, "Accept", "authorization", "Content-Type"),
+          (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
-      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link"))
+      const responseInfo = _.assign(
+        {status: `${response.status} ${statusText}`},
+        _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link", "content-language"))
       printInfo(responseInfo, "response")
       if (response.status !== 205) current = response
       redoWithAuth = _.partial(doAction, actionNameOrIndex, params)
@@ -149,10 +168,16 @@ function _delete(callback) {
     .followRedirect(false)
     .header("Accept", referenceMediaType)
     .end(response => {
-      const requestInfo = _.assign({url: url, method: response.request.method.toUpperCase()}, _.mapKeys(_.pick(response.request.headers, "Accept", "authorization"), (value, key) => key.toLowerCase()))
+      const requestInfo = _.assign(
+        {url: url, method: response.request.method.toUpperCase()},
+        _.mapKeys(
+          _.pick(response.request.headers, "Accept", "authorization"),
+          (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
       const statusText = httpStatusCodes.getStatusText(response.status)
-      const responseInfo = _.assign({status: `${response.status} ${statusText}`}, _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link"))
+      const responseInfo = _.assign(
+        {status: `${response.status} ${statusText}`},
+        _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link", "content-language"))
       printInfo(responseInfo, "response")
       current = response
       callback(null, response)
@@ -185,6 +210,22 @@ function options(callback) {
   })
 }
 
+function prev(callback) {
+  const rangeMatch = current.headers["content-range"].match(/^(\w+) (\d)\-\d\/\d/)
+  const rangeType = rangeMatch[1]
+  const currentPageNumber = Number(rangeMatch[2])
+  const prevPageNumber = currentPageNumber === 0 ? 0 : currentPageNumber - 1
+  redoWithRange(`${rangeType}=${prevPageNumber}-${prevPageNumber}`, callback)
+}
+
+function next(callback) {
+  const rangeMatch = current.headers["content-range"].match(/^(\w+) (\d)\-\d\/\d/)
+  const rangeType = rangeMatch[1]
+  const currentPageNumber = Number(rangeMatch[2])
+  const nextPageNumber = currentPageNumber === 0 ? 0 : currentPageNumber + 1
+  redoWithRange(`${rangeType}=${nextPageNumber}-${nextPageNumber}`, callback)
+}
+
 function wait(seconds, callback) {
   setTimeout(_.partial(callback, null), seconds * 1000)
 }
@@ -213,4 +254,10 @@ function silent(obj) {
 
 function obfuscate(url) {
   return url.replace(/\w+$/, shortid.generate())
+}
+
+function yamlArray(prop) {
+  if (!current.body) return console.error("no body")
+  if (!current.body[prop]) return console.error(`no body["${prop}"]`)
+  if (current.body[prop].length) return console.log(yaml(current.body[prop]))
 }

@@ -93,3 +93,7 @@ game.to(root, "text/plain")
   .then(() => game.do("write", {text: "2342"}))
   .then(() => game.go(0)) // 303
   .then(() => game.follow()) // paradox
+  .then(() => game.go(0)) // board
+  .then(() => game.next())
+  .then(() => game.prev())
+  .then(() => game.prev())
