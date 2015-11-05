@@ -84,11 +84,11 @@ game.to(root, "text/plain")
   .then(() => game.go(0))
   .then(() => game.go(0)) // 307 time travel
   .then(() => game.follow())
-  .then(() => game.go(0)) // control room past
-  .then(() => game.go(0)) // corridor past
-  .then(() => game.go(0)) // hanger past
-  .then(() => game.go(0)) // corridor past
-  .then(() => game.go(1)) // third door past
+  .then(() => game.go(0)) // to control room past
+  .then(() => game.go(0)) // to corridor past
+  .then(() => game.go(1)) // to hanger past
+  .then(() => game.go(0)) // to corridor past
+  .then(() => game.go(2)) // to third door past
   .then(() => game.do("write", {text: "2341"}))
   .then(() => game.do("write", {text: "2342"}))
   .then(() => game.go(0)) // 303

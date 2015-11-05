@@ -40,7 +40,8 @@ module.exports = {
   autoControls: () => autoControls = !autoControls,
   links: _.partial(yamlArray, "links"),
   actions: _.partial(yamlArray, "actions"),
-  controls: () => module.exports.links() || module.exports.actions()
+  // controls: () => module.exports.links() || module.exports.actions()
+  controls: controls
 }
 
 module.exports.silent = silent(module.exports)
@@ -116,6 +117,7 @@ function doAction(actionNameOrIndex, params, auth, callback) {
     callback = params
     params = undefined
   }
+  if (!current.body.actions) return console.error("no actions available")
   const action = _.find(current.body.actions, {name: actionNameOrIndex}) || current.body.actions[actionNameOrIndex]
   if (!action) return console.error(`no action named/at index ${actionNameOrIndex}`)
   const url = referenceUrl + action.href
@@ -141,7 +143,7 @@ function doAction(actionNameOrIndex, params, auth, callback) {
         {status: `${response.status} ${statusText}`},
         _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link", "content-language"))
       printInfo(responseInfo, "response")
-      if (response.status !== 205) current = response
+      current = response
       redoWithAuth = _.partial(doAction, actionNameOrIndex, params)
       backUrl = lastUrl
       lastUrl = url
@@ -252,8 +254,16 @@ function yaml(obj) {
 
 function printInfo(info, prefix) {
   console.log(colors.cyan(prefix))
-  _.each(info, (value, key) => console.log(colors.yellow(`  ${key}:`), value))
+  _.each(info, (value, key) => console.log(coloredKey(key, value), value))
   console.log()
+}
+
+function coloredKey(key, value) {
+  const template = `  ${key}:`
+  if (key !== "status") return colors.yellow(template)
+  if (value[0] === "2") return colors.green(template)
+  if (value[0] === "3") return colors.blue(template)
+  if (value[0] === "4") return colors.red(template)
 }
 
 function silent(obj) {
@@ -268,4 +278,14 @@ function yamlArray(prop) {
   if (!current.body) return console.error("no body")
   if (!current.body[prop]) return console.error(`no body["${prop}"]`)
   if (current.body[prop].length) return console.log(yaml(current.body[prop]))
+}
+
+function controls() {
+  if (!current.body) return console.error("no body")
+  const lightLinks = _(current.body.links)
+    // .map(({title, href, rel}, index) => ({title, href, index, rel}))
+    // .reject(({rel}) => _.contains(rel, "self"))
+    .map(({title, href}, index) => ({title, href, index}))
+    .value()
+  console.log(yaml({links: lightLinks || null, actions: current.body.actions || null}))
 }

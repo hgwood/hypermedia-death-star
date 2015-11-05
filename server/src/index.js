@@ -49,7 +49,13 @@ _.each(routes, function(uri, placeId) {
 
   if (place.hook) place.hook(app, uri, place, placeId)
 
-  app.all(uri, (request, response) => response.sendStatus(405))
+  // this is commented because express show them in the allow header when call options, which I don't want
+  // these routes take effect only if nothing is already defined for that route and that method
+  // app.get(uri, (request, response) => response.sendStatus(405))
+  // app.post(uri, (request, response) => response.sendStatus(405))
+  // app.put(uri, (request, response) => response.sendStatus(405))
+  // app.patch(uri, (request, response) => response.sendStatus(405))
+  // app.delete(uri, (request, response) => response.sendStatus(405))
 })
 
 
