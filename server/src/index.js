@@ -16,7 +16,8 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json({type: "application/*+json"}))
 app.set("views", path.join(__dirname, "node_modules"))
 
-const routes = process.argv[2] === "--obs" ? require("places/routes-obfuscated") : require("places/routes")
+// const routes = process.argv[2] === "--obs" ? require("places/routes-obfuscated") : require("places/routes")
+const routes = require("places/routes")
 
 _.each(routes, function(uri, placeId) {
   const place = render(placeId, _.cloneDeep(require(`places/${placeId}`)), uri)
@@ -24,15 +25,18 @@ _.each(routes, function(uri, placeId) {
   app.get(uri, place.handler ? _.partial(place.handler, place) : function(request, response) {
     persistence.with(placeId, function(place) {
       if (place.deleted) return response.status(410).location(place.locationAfterDelete).send()
+      if (place.fail) return response.sendStatus(740)
+      if (place.location) response.location(place.location)
       sendPlace(response, place)
       return false
     })
   })
 
-  _.each(place.actions, function(action) {
-    // console.log(action)
+  const actions = place.ranged ? _(place[place.ranged]).map("actions").compact().flatten().value() : place.actions
+
+  _.each(actions, function(action) {
     const target = action.href
-    // console.log("target", action.unhref)
+    console.log("register handler for", placeId, action.name, action.method.toLowerCase(), target)
     if (action.handler) app[action.method.toLowerCase()](target, _.partial(action.handler, _.assign({id: placeId}, place), action))
     else {
       app[action.method.toLowerCase()](target, function(request, response) {

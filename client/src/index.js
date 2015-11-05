@@ -16,6 +16,7 @@ let redoWithRange
 let autoLook
 let autoControls
 let lastUrl
+let backUrl
 const cache = {}
 
 module.exports = {
@@ -27,6 +28,7 @@ module.exports = {
   delete: bluebird.promisify(_delete),
   get: bluebird.promisify(get),
   options: bluebird.promisify(options),
+  back: bluebird.promisify(back),
   prev: bluebird.promisify(prev),
   next: bluebird.promisify(next),
   wait: bluebird.promisify(wait),
@@ -82,7 +84,7 @@ function gotoUrlWithAuth(url, mediaType, auth, range, callback) {
           _.pick(response.request.headers, "Accept", "authorization", "If-None-Match", "Range"),
           (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
-      const statusText = httpStatusCodes.getStatusText(response.status)
+      const statusText = response.status !== 740 ? httpStatusCodes.getStatusText(response.status) : "Computer says no"
       const responseInfo = _.assign(
         {status: `${response.status} ${statusText}`},
         _.pick(response.headers, "content-type", "etag", "location", "link", "content-language", "content-range"))
@@ -97,6 +99,7 @@ function gotoUrlWithAuth(url, mediaType, auth, range, callback) {
       }
       redoWithAuth = _.partial(gotoUrlWithAuth, url, mediaType)
       redoWithRange = _.partial(gotoUrlWithAuth, url, mediaType, undefined)
+      backUrl = lastUrl
       lastUrl = url
       if (autoLook && response.body) module.exports.look()
       if (autoControls && response.body) module.exports.controls()
@@ -133,13 +136,14 @@ function doAction(actionNameOrIndex, params, auth, callback) {
           _.pick(response.request.headers, "Accept", "authorization", "Content-Type"),
           (value, key) => key.toLowerCase()))
       printInfo(requestInfo, "request")
-      const statusText = httpStatusCodes.getStatusText(response.status)
+      const statusText = response.status !== 302 ? httpStatusCodes.getStatusText(response.status) : "Found"
       const responseInfo = _.assign(
         {status: `${response.status} ${statusText}`},
         _.pick(response.headers, "content-type", "etag", "location", "www-authenticate", "link", "content-language"))
       printInfo(responseInfo, "response")
       if (response.status !== 205) current = response
       redoWithAuth = _.partial(doAction, actionNameOrIndex, params)
+      backUrl = lastUrl
       lastUrl = url
       if (autoLook) module.exports.look()
       if (autoControls) module.exports.controls()
@@ -208,6 +212,10 @@ function options(callback) {
     printInfo(responseInfo, "response")
     callback(null, response)
   })
+}
+
+function back(callback) {
+  gotoUrl(backUrl, referenceMediaType, callback)
 }
 
 function prev(callback) {
