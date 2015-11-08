@@ -21,6 +21,8 @@ The code for my talk *Hypermedia in the Shadow of the Death Star*.
   - `get(mediaType)`: makes a GET request at the last URL used with an `Accept` header (the media type will then be re-used for further requests)
   - `delete()`: makes a DELETE request the last URL used
   - `prev()`, `next()`: navigates partial resources
+  - `back()`: makes a GET request to the next to last visited URL
+- Start by calling `g.to("http://localhost:3000", "application/x.star+json")` then follow the links ;)
 
 As of yet, the server is stateful and can only handle one game at a time. You must restart the server everytime you want to start a new game.
 
