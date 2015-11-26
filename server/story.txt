@@ -1,4 +1,4 @@
-Il est trop tard pour faire demi-tour. Vous sentez le poigne de fer de l'Empire Galactique se refermer sur vous. La lutte est veine, mais il y a d'autres façons de remporter la victoire. Votre maîtrise des pouvoirs de l'HTTP sera indispensable à votre survie. Saurez-vous affronter l'impitoyable Vador ?
+Il est trop tard pour faire demi-tour. Vous sentez la poigne de fer de l'Empire Galactique se refermer sur vous. La lutte est vaine, mais il y a d'autres façons de remporter la victoire. Votre maîtrise des pouvoirs de l'HTTP sera indispensable à votre survie. Saurez-vous affronter l'impitoyable Vador ?
 
 Pour commencer, POSTer votre nom (name) à http://
 
@@ -13,7 +13,7 @@ Le hangar est vide et silencieux. La seule issue semble être un couloir sur vot
 links: back into ship, to corridor
 
 
-Le couloir s'étend sur une dizaine de mètre et donne accès à 3 portes, dont 2 sont fermées, d'après la lumière rouge qui émane de leur bouton d'ouverture. La troisième est vérouillé par un digicode.
+Le couloir s'étend sur une dizaine de mètres et donne accès à 3 portes, dont 2 sont fermées, d'après la lumière rouge qui émane de leur bouton d'ouverture. La troisième est verrouillée par un digicode.
 
 links: back to hanger, examine 3rd door, try digicode*
 
@@ -27,12 +27,12 @@ location: back to corridor*
 links: back to hanger, examine 3rd door*, try digicode
 
 
-Un petit papier jaune de forme carré est collé sur la porte. 4 chiffres y sont griffonés : 2342. Dans le coin est indiqué: "9th light, premier fournisseur d'Agilité".
+Un petit papier jaune de forme carrée est collé sur la porte. 4 chiffres y sont griffonnés : 2342. Dans le coin est indiqué: "9th light, premier fournisseur d'Agilité".
 
 links: back to corridor, try digicode*
 
 
-La porte s'ouvre puis se referme derrière vous. La pièce est immense. En son centre, un grand écran affiche "Commandes du rayon tracteur". Vous vous demandez comment un jeu peut-être aussi facile. Une autre porte se dessine sur le mur d'en face.
+La porte s'ouvre puis se referme derrière vous. La pièce est immense. En son centre, un grand écran affiche "Commandes du rayon tracteur". Vous vous demandez comment un jeu peut être aussi facile. Une autre porte se dessine sur le mur d'en face.
 
 links: back to corridor, to console*, to door
 
@@ -83,9 +83,9 @@ links: look at progress*, to door
 303.
 
 
-L'écran a à peine affiché 100% que la porte d'entrée s'ouvre. Vous l'entendez avant de le voir. Le plus dangereux des asmathiques est là, devant vous, sabre laser armé. L'effroi vous envahit. Tout est perdu. A moins que vous ne connaissiez bien vos méthodes HTTP.
+L'écran a à peine affiché 100% que la porte d'entrée s'ouvre. Vous l'entendez avant de le voir. Le plus dangereux des asthmatique est là, devant vous, sabre laser armé. L'effroi vous envahit. Tout est perdu. A moins que vous ne connaissiez bien vos méthodes HTTP.
 
-links tp image and sound, no actions => manual delete
+links to image and sound, no actions => manual delete
 
 204, link to room*
 
@@ -95,29 +95,29 @@ links tp image and sound, no actions => manual delete
 links: go to door where we came from*, back door
 
 
-Alors que vous approchez de la porte, vous entendez des dizaines de pas que se précipitent vers elle de l'autre côté. Des stormtroopers !
+Alors que vous approchez de la porte, vous entendez des dizaines de pas qui se précipitent vers elle de l'autre côté. Des stormtroopers !
 
 links: go to certain death*, look to hide*
 
 
 303
 
-La porte au fond de la salle s'ouvre et quelqu'un entre dans la pièce. C'est une jeune fille, armé d'une hache et d'une machette. Elle traverse la pièce en courant, passe devant vous sans vous voir, puis se précipite dans le couloir. La porte se referme derrière elle. Des cris retentissent.
+La porte au fond de la salle s'ouvre et quelqu'un entre dans la pièce. C'est une jeune fille, armée d'une hache et d'une machette. Elle traverse la pièce en courant, passe devant vous sans vous voir, puis se précipite dans le couloir. La porte se referme derrière elle. Des cris retentissent.
 
 links: go to other door, follow girl*
 
 
-Les cris continuent. Après réflexion, vous pensez qu'il ne voudrait mieux pas aller par là. Oui, ce jeu est sur un rail.
+Les cris continuent. Après réflexion, vous pensez qu'il vaudrait mieux ne pas aller par là. Oui, ce jeu est sur un rail.
 
 links: go to other door*
 
 
-Vous entrez dans une petit salle. Au centre, une sphère bleue translucide flotte au-dessus du sol, en emmettant un léger vrombissement. Vous sentez une force vous tirer vers la sphère. Vous tentez de reculer, mais vous glissez.
+Vous entrez dans une petite salle. Au centre, une sphère bleue translucide flotte au-dessus du sol, en émettant un léger vrombissement. Vous sentez une force vous tirer vers la sphère. Vous tentez de reculer, mais vous glissez.
 
 links: se laisser aspirer*
 
 
-Le tonnerre retentit, le sphère disparait, ainsi que l'aspiration. La pièce est resté inchangée. Il n'y a pas d'autre issue hormis la porte par laquelle vous êtes entré.
+Le tonnerre retentit, le sphère disparaît, ainsi que l'aspiration. La pièce est restée inchangée. Il n'y a pas d'autre issue hormis la porte par laquelle vous êtes entré.
 
 links: sortir*
 
@@ -141,13 +141,13 @@ links: couloir*
 links: salle de contrôle, examiner la troisième porte*, hangar
 
 
-Un petit papier jaune de forme carré est collé sur la porte. Dans le coin est indiqué: "9th light, premier fournisseur d'Agilité".
+Un petit papier jaune de forme carrée est collé sur la porte. Dans le coin est indiqué: "9th light, premier fournisseur d'Agilité".
 
 links: couloir
 actions: write code* (add same action to old paper, it's a PATCH on the message of the paper)
 
 
-Un petit papier jaune de forme carré est collé sur la porte. 4 chiffres y sont griffonés : 2342. Dans le coin est indiqué: "9th light, premier fournisseur d'Agilité".
+Un petit papier jaune de forme carrée est collé sur la porte. 4 chiffres y sont griffonnés : 2342. Dans le coin est indiqué: "9th light, premier fournisseur d'Agilité".
 
 links: couloir*
 actions: write code
@@ -162,12 +162,12 @@ links: examiner la colonne intitulé "To Do", "Doing"*, "Done"
 
 Le colonne "Doing" contient un unique papier, sur lequel est écrit "Examiner ce tableau".
 
-links: examiner la colonne intitulé "To Do", "Done"*
+links: examiner la colonne intitulée "To Do", "Done"*
 
 
 La colonne "Done" contient plusieurs papiers sur lesquels sont écrits de courts messages: "Se faire capturer par l'étoile noire", "Eteindre le rayon tracteur", "DELETE /vader", "Remonter dans le temps", "Noter le code sur la porte".
 
-links: examiner la colonne intitulé "To Do"*, "Doing"
+links: examiner la colonne intitulée "To Do"*, "Doing"
 
 
 La colonne "To Do" contient plusieurs papiers sur lequels sont écrits de courts messages: ""
